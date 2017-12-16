@@ -1,0 +1,200 @@
+#include<stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define TRUE  1;
+#define FALSE 0;
+
+/*
+ * define the struct node for all of nodes
+ */
+struct node
+{
+    char string[100];
+    struct node *next;
+};
+
+/*
+ * create a linked list of strings
+ */
+struct node *create()
+{
+    char str[100];
+    int isFirst = TRUE;
+    struct node *head = NULL;
+    head = malloc(sizeof(struct node));
+    if(head == NULL){
+        printf("Error:Out of memory");
+        return 1;
+    }
+
+    struct node *headNode;
+    struct node *newNode;
+
+    do
+    {
+        if(isFirst) {
+            printf("Enter first word (or '.' to end list):");
+        }else {
+            printf("Enter next word (or '.' to end list):");
+        }
+
+        scanf("%s",&str);
+        if(!strcmp(str,".")) {
+            break;
+        }
+
+        if(isFirst){
+
+            headNode = malloc(sizeof(struct node));
+            if(headNode == NULL){
+                printf("Error:Out of memory");
+                return 1;
+            }
+            strcpy(headNode->string,str);
+            headNode->next = NULL;
+            head->next = headNode;
+            isFirst = FALSE;
+        } else {
+            newNode = malloc(sizeof(struct node));
+            if (newNode == NULL) {
+                printf("Error:Out of memory");
+                return 1;
+            }
+            strcpy(newNode->string, str);
+            newNode->next = NULL;
+            while(headNode->next != NULL){
+                headNode = headNode->next;
+            }
+            headNode->next = newNode;
+        }
+    }  while(strcmp(str,"."));
+    return head;
+}
+
+/*
+ * print out a linked list of strings
+ */
+void print(struct node *list)
+{
+    struct node *node1 = list->next;
+    printf("%s\n ","THE LIST IS NOW:");
+    while(node1 != NULL){
+        printf("%s ",node1->string);
+        node1 = node1->next;
+    }
+    printf("\n");
+}
+/*
+ * add a string after selected string,if it does not exist,then do nothing.
+ */
+void add_after( struct node *list,char a_word[], char word_after[]) {
+    struct node * newNode = malloc(sizeof(struct node));
+    if(newNode == NULL){
+        printf("Error:Out of memory");
+        return;
+    }
+    strcpy(newNode->string,a_word);
+
+    struct node * node1 = list->next;
+    while(node1!=NULL){
+        if(strcmp(word_after,node1->string)!=0){
+            node1 = node1->next;
+        } else {
+            newNode->next = node1->next;
+            node1->next = newNode;
+            break;
+        }
+    }
+    print(list);
+}
+
+void delete_node(struct node *list, char a_word[]){
+
+    struct node *node1 = list;
+    if(list->next == NULL){
+        printf("Sorry there is nothing to delete");
+        return;
+    }
+
+    while(node1->next!=NULL){
+        if(strcmp(a_word,node1->next->string)==0){
+            node1->next = node1->next->next;
+            break;
+        }
+        node1 = node1->next;
+    }
+    print(list);
+}
+
+void list_selection_sort(struct node *list)
+{
+    if(list == NULL || list->next == NULL){
+        return;
+    }
+
+    struct node *node1;
+    char temp[100];
+    int n = numberOfString(list);
+
+    /*
+     * a simple bubble sort to sort it
+     */
+    for(int j = 0; j < n; j++){
+        node1 = list;
+        for(int i = 1; i < n - j; i++){
+            if(twoStrCompr1(node1->string,node1->next->string)){
+                strcpy(temp,node1->string);
+                strcpy(node1->string,node1->next->string);
+                strcpy(node1->next->string,temp);
+            }
+            node1 = node1->next;
+        }
+    }
+    print(list);
+}
+
+int twoStrCompr1(char x[], char y[]){
+    if(strcmp(x,y)<0){//this API compares the ASCII order,which is opposite of the alphabetical order.
+        return FALSE;
+    }else{
+        return TRUE;
+    }
+}
+
+/*
+ * to get the number of strings
+ */
+int numberOfString(struct node *list)
+{
+    int n = 0;
+    struct node *p = list->next;
+    while(p != NULL){
+        n++;
+        p = p->next;
+    }
+    return n;
+}
+
+int main()
+{
+    struct node *linkedList = create();
+    print(linkedList);
+    printf("\n");
+
+    char str1[100],str2[100];
+    printf("\nAFTER WHICH WORD WOULD YOU LIKE TO ADD AN EXTRA WORD?");
+    scanf("%s",&str1);
+    printf("\nWHICH WORD WOULD YOU LIKE TO ADD?");
+    scanf("%s",&str2);
+    add_after(linkedList,str2,str1);
+
+    printf("\nWHICH WORD WOULD YOU LIKE TO DELETE?");
+    char str3[100];
+    scanf("%s",&str3);
+    delete_node(linkedList,str3);
+
+    printf("\n");
+    printf("\nAFTER SORTING,");
+    list_selection_sort(linkedList);
+    return 0;
+}

@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <string.h>
+#define  TRUE 1
+#define  FALSE 0
+
+int twoStrCompr(char *x, char *y,int length)
+{
+    char valueX [length],valueY [length];
+    for (int i = 0; i < length; i++) {
+        valueX [i] = *(x + i);
+        valueY [i] = *(y + i);
+        if(strcmp(valueX,valueY)<0){//this API compares the ASCII order,which is opposite of the alphabetical order.
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
+void main()
+{
+    //testing with upper-case letters and lower-case letters,assume both string with same lengths.
+    char str1[26]="ABC", str2[26]="DEF",str3[26]="abc", str4[26]="efg";
+    char *pointer1,*pointer2,*pointer3,*pointer4;//declare and assign pointers to actual values
+
+    /*initialise pointer to the first character of strings */
+    pointer1 = &(str1[0]);
+    pointer2 = &(str2[0]);
+    pointer3 = &(str3[0]);
+    pointer4 = &(str4[0]);
+    printf("str1 is \"%s\" ;",str1);
+    printf("str2 is \"%s\" ;",str2);
+    printf("str3 is \"%s\" ;",str3);
+    printf("str4 is \"%s\"",str4);
+    int result1 = twoStrCompr(pointer1,pointer2,strlen(str2));//If one of string is longer,pass the longer length instead.
+    if(result1 == 1){
+        printf("\nstr1 is alphabetically smaller than str2");
+    } else{
+        printf("\nstr2 is alphabetically smaller than str1");
+    }
+    int result2 = twoStrCompr(pointer3,pointer4,strlen(str3));//If one of string is longer,pass the longer length instead
+    if (result2 == 1){
+        printf("\nstr3 is alphabetically smaller than str4");
+    } else{
+        printf("\nstr4 is alphabetically smaller than str3");
+    }
+}

@@ -1,0 +1,92 @@
+#include<stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define TRUE  1;
+#define FALSE 0;
+
+/*
+ * define the struct node for all of nodes
+ */
+struct node
+{
+    char string[100];
+    struct node *next;
+};
+
+/*
+ * create a linked list of strings
+ */
+struct node *create()
+{
+    char str[100];
+    int isFirst = TRUE;
+    struct node *head = NULL;
+    head = malloc(sizeof(struct node));
+    if(head == NULL){
+        printf("Error:Out of memory");
+        return 1;
+    }
+
+    struct node *headNode;
+    struct node *newNode;
+
+    do
+    {
+        if(isFirst) {
+            printf("Enter first word (or '.' to end list):");
+        }else {
+            printf("Enter next word (or '.' to end list):");
+        }
+
+        scanf("%s",&str);
+        if(!strcmp(str,".")) {
+            break;
+        }
+
+        if(isFirst){
+
+            headNode = malloc(sizeof(struct node));
+            if(headNode == NULL){
+                printf("Error:Out of memory");
+                return 1;
+            }
+            strcpy(headNode->string,str);
+            headNode->next = NULL;
+            head->next = headNode;
+            isFirst = FALSE;
+        } else {
+            newNode = malloc(sizeof(struct node));
+            if (newNode == NULL) {
+                printf("Error:Out of memory");
+                return 1;
+            }
+            strcpy(newNode->string, str);
+            newNode->next = NULL;
+            while(headNode->next != NULL){
+                headNode = headNode->next;
+            }
+            headNode->next = newNode;
+        }
+    }  while(strcmp(str,"."));
+    return head;
+}
+
+/*
+ * print out a linked list of strings
+ */
+void print(struct node *list)
+{
+    struct node *node1 = list->next;
+    printf("%s\n ","THE LIST IS NOW:");
+    while(node1 != NULL){
+        printf("%s ",node1->string);
+        node1 = node1->next;
+    }
+    printf("\n");
+}
+int main()
+{
+    struct node *linkedList = create();
+    print(linkedList);
+    printf("\n");
+}

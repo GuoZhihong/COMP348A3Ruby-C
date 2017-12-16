@@ -1,0 +1,4 @@
+I would recommend to learn the lisp first because its code is shorter than C,
+and it is easy to input and output results since you just copy and paste writen-functions into lisp interpreter,
+then input function and parameters and get the result.There is no global,local variables or pointers.
+For computational questions like this one, lisp is much better I think.
